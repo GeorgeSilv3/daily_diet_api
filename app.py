@@ -35,7 +35,9 @@ def create_meal():
 
 @app.route("/meal/<int:meal_id>", methods=["DELETE"])
 def delete_meal(meal_id):
+
     meal = Meal.query.get(meal_id)
+
     if meal:
         try:
             db.session.delete(meal)
@@ -43,6 +45,27 @@ def delete_meal(meal_id):
             return jsonify({"message" :"meal deleted with successfull"})
         except:
             return jsonify({"message": "something was wrong"}), 500
+
+    return jsonify({"message": "meal not found"}), 404
+
+
+@app.route("/meal/<int:meal_id>", methods=["PUT"])
+def update_meal(meal_id):
+
+    # Refactor these codes -> create a function to insert this values in db
+
+    data = request.json
+    meal = Meal.query.get(meal_id)  
+
+    if meal:
+        meal.name = data.get("name")
+        meal.description = data.get("description")
+        meal.date_time = datetime.fromisoformat(data.get("date_time"))
+        meal.on_diet = (True if data.get("on_diet").lower() == "true" else False)
+
+        db.session.commit()
+
+        return jsonify({"message" :"meal updated with successfull"})
 
     return jsonify({"message": "meal not found"}), 404
 
