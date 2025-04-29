@@ -32,5 +32,19 @@ def create_meal():
 
     return jsonify({"message": "Something goes wrong!"}), 400
 
+
+@app.route("/meal/<int:meal_id>", methods=["DELETE"])
+def delete_meal(meal_id):
+    meal = Meal.query.get(meal_id)
+    if meal:
+        try:
+            db.session.delete(meal)
+            db.session.commit()
+            return jsonify({"message" :"meal deleted with successfull"})
+        except:
+            return jsonify({"message": "something was wrong"}), 500
+
+    return jsonify({"message": "meal not found"}), 404
+
 if __name__ == "__main__":
     app.run(debug=True)
