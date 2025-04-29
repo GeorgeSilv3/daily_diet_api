@@ -77,5 +77,14 @@ def read_meals():
     
     return jsonify(meals_parsed)
 
+@app.route("/meal/<int:meal_id>", methods=["GET"])
+def read_meal(meal_id):
+    meal = Meal.query.get(meal_id)
+
+    if meal:
+        return jsonify(meal.to_dict())
+
+    return jsonify({"message": "meal not found"}), 404 
+
 if __name__ == "__main__":
     app.run(debug=True)
