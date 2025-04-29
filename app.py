@@ -69,5 +69,13 @@ def update_meal(meal_id):
 
     return jsonify({"message": "meal not found"}), 404
 
+
+@app.route("/meal", methods=["GET"])
+def read_meals():
+    meals = db.session.query(Meal).all()
+    meals_parsed = [meal.to_dict() for meal in meals]
+    
+    return jsonify(meals_parsed)
+
 if __name__ == "__main__":
     app.run(debug=True)
