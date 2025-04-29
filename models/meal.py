@@ -12,3 +12,12 @@ class Meal(db.Model, UserMixin):
     description: Mapped[str] = mapped_column(String(80))
     date_time: Mapped[datetime] = mapped_column(nullable=False)
     on_diet: Mapped[bool] = mapped_column(nullable=False)
+
+    def to_dict(self):
+        return {
+            "id": self.id,
+            "name": self.name,
+            "description": self.description,
+            "date_time": self.date_time,
+            "on_diet": self.on_diet
+            }
